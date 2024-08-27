@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block navbar%}
+{% for c in category_list %}
+  
+      <strong><a class="nav-item nav-link link-body-emphasis" href="#">{{c.categoryName}}</a></strong>
+
+{% endfor %}
+{% endblock %}
