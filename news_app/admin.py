@@ -16,7 +16,6 @@ class AdminRegister(admin.ModelAdmin):
 
 @admin.register(Posts)
 class VolumePosts(admin.ModelAdmin):
-    # list_display = ['categoryID','postImage','volumeID','postedBy']
     list_display = [x.name for x in Posts._meta.fields]
     list_filter = ['categoryID']
     fields = ['categoryID','subcategoryID','postTitle','slug','postDetails','postingDate','postURL','postImage','lastUpdatedBy','volumeID','isActive']
@@ -24,9 +23,6 @@ class VolumePosts(admin.ModelAdmin):
 
     def get_queryset(self, request):
         abc = super(VolumePosts, self).get_queryset(request)
-        # if request.user.is_superuser:
-        #     return abc
-        # else:
         operator = request.user.id
         return abc.filter(postedBy=operator)
 
@@ -34,8 +30,6 @@ class VolumePosts(admin.ModelAdmin):
         if not obj.postedBy:
             obj.postedBy = request.user
         obj.save()
-
-    
 
 @admin.register(Category)
 class PostCategory(admin.ModelAdmin):

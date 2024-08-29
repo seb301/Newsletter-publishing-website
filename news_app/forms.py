@@ -5,19 +5,9 @@ from .models import Submission
 
 class PostForm(forms.ModelForm):
 
-    # name=forms.CharField(label='Enter name here:',widget=forms.TextInput(attrs={'class':'form-control'}))
-
     class Meta:
         model = Submission
         fields="__all__"
-        # widgets={
-        #     'name' : forms.TextInput(attrs={'class':'form-control mt-2','placeholder':'Enter Name'}),
-        #     'email' : forms.TextInput(attrs={'class':''}),
-        #     'postTitle' : forms.TextInput(attrs={'class':''}),
-        #     'postDetails' : forms.TextInput(attrs={'class':''}),
-        #     'postingDate' : forms.TextInput(attrs={'class':''}),
-        #     'postImage' : forms.TextInput(attrs={'class':''}),
-        # }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -38,7 +28,6 @@ class PostForm(forms.ModelForm):
 
 
 #use summernote API for postDetails
-
 
 # <label for="formFileMultiple" class="form-label">Multiple files input example</label>
 #   <input class="form-control" type="file" id="formFileMultiple" multiple>

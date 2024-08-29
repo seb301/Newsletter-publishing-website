@@ -4,6 +4,8 @@ from .models import Posts,Category,Sub_category
 from .forms import PostForm
 from django.http import FileResponse,HttpResponse
 from reportlab.pdfgen import canvas
+from reportlab.platypus import Table, TableStyle
+from reportlab.lib import colors
 from datetime import datetime
 
 # Create your views here.
@@ -22,6 +24,7 @@ class PostListView(ListView):
         context['category_list']=Category.objects.all()
         context['recent_posts']=Posts.objects.order_by('-postingDate')[:3]
         context['sub_category_list']=Sub_category.objects.all()
+        # context['featured_post_img']=Posts.objects.
 
         context['featured_post']=Posts.objects.get(slug='featured-post')
 
@@ -31,8 +34,6 @@ class PostListView(ListView):
         # context['sub_category_list']=Sub_category.objects.values_list(subCategory=1)
         # print(context)
         return context
-
-        # print(sub_category_list.values_list('subCategory'))
 
     def get_queryset(self):
         self.cat=self.kwargs.get('cat',None)
@@ -91,32 +92,47 @@ def post_form(request):
 
 
 
+from PIL import Image
 
 def pdf_generate(request):
 
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="file.pdf"'
-
+    
     post=Posts.objects.all()
-    cat=Posts.objects.all().values()
+    cat=Category.objects.all()
+    sub_cat=Sub_category.objects.all()
 
     c=canvas.Canvas(response)
     c.setFont('Times-Roman',14)
-    c.drawString(225,800, "List of events")
+    c.drawString(260,700, "List of events")
+    c.drawString(450,750, f"Date: {datetime.now():%d-%m-%Y}")
 
-    header=['Sl.No','Posted By','Title','Category','Sub Category']
+    img=Image.open(r"C:\Users\prash\OneDrive\Documents\Django project\news_app\static\img\Cmrit.png")
+    
+    c.drawInlineImage(img,25, 730)
+    
+    table_data=[]
+    header=['Sl.No','Posted By','Posting Date','Title','Category','Sub Category']
+    table_data.append(header)
+    
+    for j,i in enumerate(post):
+        table_data.append([f"{j+1}.",i.postedBy,i.postingDate,i.postTitle,i.categoryID,i.subcategoryID])
+    
+    # for k,ca in enumerate(cat):
+    #     table_data[k].append(ca.categoryName)
 
-    c.setFont('Times-Roman',8)
-    x=100 
-    for h in header:
-        c.drawString(x,750,h)
-        x+=100
+    print(table_data)
 
-    # data=[]
-    y=750
-    for p in post:
-        c.drawString(150,y,f'{p.postTitle}')
-        y-=100
+    table=Table(table_data) #,colWidths=[doc.width/3.0]*3
+    table=Table(table_data)
+    table.setStyle(TableStyle([('INNERGRID', (0, 0), (-1, -1), 0.25,colors.black),('BOX', (0, 0), (-1, -1), 0.25, colors.black)]))
+ 
+    cw=600
+    ch=470
+
+    table.wrapOn(c,cw,ch)
+    table.drawOn(c,40,ch-len(table_data))
 
 
     c.showPage()

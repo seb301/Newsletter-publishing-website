@@ -4,10 +4,16 @@
 <div class="border-bottom"></div>
 
 {% block featured %}
-<h1 class="display-4 fst-italic">{{featured_post.postTitle}}</h1>
-      <p class="lead my-3">{{featured_post.postDetails|safe|truncatewords:10}}</p>
-      <p class="lead mb-0"><a href="{% url 'post_detail' featured_post.pk %}" class="text-body-emphasis fw-bold">Continue reading...</a></p>
-
+<div class="p-4 p-md-5 my-4 rounded text-body-emphasis bg-body-secondary border border-light" style="background-image: url('{{featured_post.postImage.url}}')">
+    <div class="my-4">
+        <div class="col-lg-6 px-0">
+            <h1 class="display-4 fst-italic text-white">{{featured_post.postTitle}}</h1>
+            <p class="lead my-3 text-white">{{featured_post.postDetails|safe|truncatewords:10}}</p>
+            <p class="text-white lead mb-0"><a  id="fid" href="{% url 'post_detail' featured_post.pk %}"
+                    class="text-white text-body-emphasis fw-bold">Continue reading...</a></p>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block content %}
@@ -19,23 +25,24 @@
         <strong class="d-inline-block mb-2 text-light">{{p.categoryID}}</strong>
         <h3 class="mb-0">{{p.postTitle|title}}</h3>
         <div class="mb-1 text-body-secondary">{{p.postingDate | date:"M y"}}</div>
-        
 
-        {% if p.postTitle|length <= 44 %}
-        <p class="card-text mb-auto">{{p.postDetails|safe|truncatewords:26}}</p>
-        {% else %}
-        <p class="card-text mb-auto">{{p.postDetails|safe|truncatewords:15}}</p>
-        {% endif %}
-        
-        <a href="{% url 'post_detail' p.pk %}" class="icon-link gap-1 icon-link-hover stretched-link">   
-            Continue reading
-            <svg class="bi"><use xlink:href="#chevron-right"/></svg>
-        </a>
+
+        {% if p.postTitle|length <= 44 %} <p class="card-text mb-auto">{{p.postDetails|safe|truncatewords:26}}</p>
+            {% else %}
+            <p class="card-text mb-auto">{{p.postDetails|safe|truncatewords:15}}</p>
+            {% endif %}
+
+            <a href="{% url 'post_detail' p.pk %}" class="icon-link gap-1 icon-link-hover stretched-link">
+                Continue reading
+                <svg class="bi">
+                    <use xlink:href="#chevron-right" />
+                </svg>
+            </a>
 
     </div>
     <div class="col-auto d-none d-lg-block">
         <!-- <svg class="bd-placeholder-img" width="200" height="250" xmlns="" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg> -->
-         <img src="/{{p.postImage}}" alt="{{p.postTitle}}" width="200" height="250">
+        <img src="/{{p.postImage}}" alt="{{p.postTitle}}" width="200" height="250">
     </div>
 </div>
 {% endfor %}

@@ -3,6 +3,10 @@
 
 <div class="border-bottom"></div>
 
+{% block featured %}
+
+{% endblock %}
+
 {% block content %}
 <div class="col border rounded p-4 mb-4">
     
@@ -10,7 +14,7 @@
         <h1>{{post.postTitle}}</h1>
         <h3>{{post.postingDate}}</h3>
     </div>
-    <img class="img-fluid" src="{{ post.postImage.url }}" style="height:400px; width:800px" alt="{{post.postTitle}}">
+    <img class="img-fluid mt-3 mb-4" src="{{ post.postImage.url }}" style="height:400px; width:800px" alt="{{post.postTitle}}">
     <br>
     <p>{{post.postDetails}}</p>    
 </div>
